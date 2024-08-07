@@ -11,34 +11,24 @@ if (!process.env.ADVENT_SESSION) {
   }
 }
 
-if (process.env.ADVENT_SESSION) {
-  let year = process.argv[2];
-  let day = process.argv[3];
-  if (process.argv[2] && process.argv[2].includes('/')) {
-    let clean = process.argv[2].split('/').slice(-2);
-    let yearNum = parseInt(clean[0]);
-    let dayNum = parseInt(clean[1].match(/\d+/).pop());
-    if (Number.isNaN(yearNum) || Number.isNaN(dayNum)) {
-      console.error('Invalid arguments');
-      process.exit(0);
-    }
-    year = `${yearNum}`;
-    day = `${dayNum}`;
+// if (process.env.ADVENT_SESSION) {
+let year = process.argv[2];
+let day = process.argv[3];
+if (year && (year.includes('/') || year.includes('\\'))) {
+  let clean = year.split(/[\\/]/).slice(-2);
+  let yearNum = parseInt(clean[0]);
+  let dayNum = parseInt(clean[1].match(/\d+/).pop());
+  if (Number.isNaN(yearNum) || Number.isNaN(dayNum)) {
+    console.error('Invalid arguments');
+    process.exit(0);
   }
-  if (year) {
-    await solveAll(year, day).catch(err => console.error(err.stack));
-  } else {
-    await solveAllYears().catch(err => console.error(err.stack));
-  }
-} else {
-  console.error('************************************************************');
-  console.error('************************************************************');
-  console.error('**                                                        **');
-  console.error('** You must set environment variable named ADVENT_SESSION **');
-  console.error('** with the session cookie value from adventofcode.com    **');
-  console.error('**                                                        **');
-  console.error('************************************************************');
-  console.error('************************************************************');
-  console.error('');
+  year = `${yearNum}`;
+  day = `${dayNum}`;
 }
+if (year) {
+  await solveAll(year, day).catch(err => console.error(err.stack));
+} else {
+  await solveAllYears().catch(err => console.error(err.stack));
+}
+
 process.exit(0);
